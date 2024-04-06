@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dynamic HTML Page</title>
+<style>
+    /* Add CSS styles here */
+</style>
+</head>
+<body>
+    <h1 id="title">Writing Paractice</h1>
+    <h2 id="subtitle">가르칠 내용을 입력하세요</h2>
+    <input type="text" id="subtitleInput" placeholder="가르칠 내용을 입력하세요.">
+    <br>
+    <input type="text" id="textInput" placeholder="단어를 입력하세요.">
+    <button onclick="addText()">추가</button>
+    <br>
+    <button onclick="displayText()">완성</button>
+    <div id="output"></div>
+
+    <script>
+        function addText() {
+            var textInput = document.getElementById("textInput");
+            var outputDiv = document.getElementById("output");
+            var text = textInput.value;
+            var p = document.createElement("p");
+            p.textContent = text;
+            outputDiv.appendChild(p);
+            textInput.value = ""; // Clear input field after adding text
+        }
+
+        function displayText() {
+            var title = document.getElementById("title");
+            var subtitleInput = document.getElementById("subtitleInput");
+            var subtitle = document.getElementById("subtitle");
+            var outputDiv = document.getElementById("output");
+            var subtitleText = subtitleInput.value;
+
+            // Update subtitle
+            subtitle.textContent = subtitleText;
+
+            // Hide subtitle input and button
+            subtitleInput.style.display = "none";
+            document.querySelector('button[onclick="addText()"]').style.display = "none";
+
+            // Display "완성" 버튼
+            document.querySelector('button[onclick="displayText()"]').style.display = "none";
+
+            // Display output
+            outputDiv.style.display = "block";
+        }
+    </script>
+</body>
+</html>
