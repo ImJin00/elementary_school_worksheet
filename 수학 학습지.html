@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>곱셈 학습지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center; /* 가운데 정렬 */
+            margin-top: 20px;
+        }
+
+        .container table {
+            margin: 0 10px; /* 좌우 여백 */
+            background-color: white;
+            border-radius: 8px;
+        }
+
+        table {
+            border-collapse: collapse; /* 테이블 테두리를 겹치게 함 */
+            width: 300px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th, td {
+            width: 100px; /* 각 셀의 너비 고정 */
+        }
+
+        button {
+            margin-top: 20px;
+            margin-right: 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>곱셈 학습지</h1>
+    <div class="container">
+        <table id="table1">
+            <thead>
+                <tr>
+                    <th></th> <!-- id 열 이름은 빈칸 -->
+                    <th>문제</th>
+                    <th>답</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody1">
+                <!-- 첫 번째 테이블의 행 -->
+            </tbody>
+        </table>
+        <table id="table2">
+            <thead>
+                <tr>
+                    <th></th> <!-- id 열 이름은 빈칸 -->
+                    <th>문제</th>
+                    <th>답</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody2">
+                <!-- 두 번째 테이블의 행 -->
+            </tbody>
+        </table>
+    </div>
+
+    <button onclick="fillAnswers()">정답 확인</button>
+
+    <script>
+        // 표에 행을 추가하는 함수
+        function addRow(tableId, id, problem, answer) {
+            var table = document.getElementById(tableId);
+            var newRow = table.insertRow();
+
+            var cell1 = newRow.insertCell(0);
+            var cell2 = newRow.insertCell(1);
+            var cell3 = newRow.insertCell(2);
+
+            cell1.innerHTML = id; // id 열은 빈칸으로 남김
+            cell2.innerHTML = problem;
+            cell3.innerHTML = numberWithCommas(answer); // 초기에는 빈 칸으로 표시
+        }
+
+        // 숫자에 천 단위 쉼표 추가하는 함수
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // 3자리 랜덤 양의 정수를 생성하는 함수
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * (999 - 100 + 1)) + 100;
+        }
+
+        var number_of_questions = 20;
+
+        // 행 추가 작업
+        function addRows() {
+            // 첫 번째 테이블에 추가할 행 수
+            var rowsForTable1 = Math.ceil(number_of_questions / 2);
+            
+            // 새로운 행 추가 - 첫 번째 테이블
+            for (var i = 1; i <= rowsForTable1; i++) {
+                var num1 = generateRandomNumber();
+                var num2 = generateRandomNumber();
+                var problem = num1 + " x " + num2;
+                addRow("tableBody1", i, problem, "");
+            }
+
+            // 두 번째 테이블에 추가할 행 수
+            var rowsForTable2 = number_of_questions - rowsForTable1;
+
+            // 새로운 행 추가 - 두 번째 테이블
+            for (var i = 1; i <= rowsForTable2; i++) {
+                var num1 = generateRandomNumber();
+                var num2 = generateRandomNumber();
+                var problem = num1 + " x " + num2;
+                addRow("tableBody2", i + rowsForTable1, problem, "");
+            }
+        }
+
+        // "<정답 확인>" 버튼 클릭 시 실행되는 함수
+        function fillAnswers() {
+            var table1 = document.getElementById("tableBody1");
+            var table2 = document.getElementById("tableBody2");
+
+            // 첫 번째 테이블의 "답" 열 채우기
+            for (var i = 0; i < table1.rows.length; i++) {
+                var num1 = parseInt(table1.rows[i].cells[1].innerHTML.split(" ")[0]);
+                var num2 = parseInt(table1.rows[i].cells[1].innerHTML.split(" ")[2]);
+                table1.rows[i].cells[2].innerHTML = numberWithCommas(num1 * num2);
+            }
+
+            // 두 번째 테이블의 "답" 열 채우기
+            for (var i = 0; i < table2.rows.length; i++) {
+                var num1 = parseInt(table2.rows[i].cells[1].innerHTML.split(" ")[0]);
+                var num2 = parseInt(table2.rows[i].cells[1].innerHTML.split(" ")[2]);
+                table2.rows[i].cells[2].innerHTML = numberWithCommas(num1 * num2);
+            }
+        }
+
+        // 페이지 로드시 초기 행 추가
+        addRows();
+    </script>
+</body>
+</html>
