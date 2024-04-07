@@ -6,10 +6,35 @@
 <title>Dynamic HTML Page</title>
 <style>
     /* Add CSS styles here */
+    #title {
+        text-align: center; /* Center align the title */
+    }
+    #subtitle {
+        text-align: center; /* Center align the subtitle */
+    }
+    .output-container {
+        display: inline-block;
+        vertical-align: top;
+        width: 45%; /* Adjust the width as needed */
+    }
+    #output, #outputRight {
+        text-align: left; /* Left align the output */
+        border: 1px solid black; /* Just for demonstration */
+        padding: 10px; /* Just for demonstration */
+        display: none; /* Hide the output initially */
+        background-size: cover; /* Cover the entire background */
+        background-position: center; /* Center the background image */
+        color: black; /* Set text color */
+        font-weight: bold; /* Set font weight to bold */
+        font-size: 2em; /* Set font size to 2 times */
+    }
+    #outputRight {
+        color: #B0B0B0; /* Set text color to light gray */
+    }
 </style>
 </head>
 <body>
-    <h1 id="title">Writing Paractice</h1>
+    <h1 id="title">Writing Practice</h1>
     <h2 id="subtitle">가르칠 내용을 입력하세요</h2>
     <input type="text" id="subtitleInput" placeholder="가르칠 내용을 입력하세요.">
     <br>
@@ -17,16 +42,20 @@
     <button onclick="addText()">추가</button>
     <br>
     <button onclick="displayText()">완성</button>
-    <div id="output"></div>
+    <div id="output" class="output-container"></div>
+    <div id="outputRight" class="output-container"></div> <!-- Right output container -->
 
     <script>
         function addText() {
             var textInput = document.getElementById("textInput");
             var outputDiv = document.getElementById("output");
+            var outputDivRight = document.getElementById("outputRight"); // Right output container
             var text = textInput.value;
             var p = document.createElement("p");
             p.textContent = text;
             outputDiv.appendChild(p);
+            var pRight = p.cloneNode(true); // Clone the paragraph for right output
+            outputDivRight.appendChild(pRight);
             textInput.value = ""; // Clear input field after adding text
         }
 
@@ -35,6 +64,7 @@
             var subtitleInput = document.getElementById("subtitleInput");
             var subtitle = document.getElementById("subtitle");
             var outputDiv = document.getElementById("output");
+            var outputDivRight = document.getElementById("outputRight"); // Right output container
             var subtitleText = subtitleInput.value;
 
             // Update subtitle
@@ -44,11 +74,17 @@
             subtitleInput.style.display = "none";
             document.querySelector('button[onclick="addText()"]').style.display = "none";
 
+            // Hide text input and its placeholder
+            var textInput = document.getElementById("textInput");
+            textInput.style.display = "none";
+            textInput.placeholder = "";
+
             // Display "완성" 버튼
             document.querySelector('button[onclick="displayText()"]').style.display = "none";
 
             // Display output
-            outputDiv.style.display = "block";
+            outputDiv.style.display = "inline-block";
+            outputDivRight.style.display = "inline-block";
         }
     </script>
 </body>
