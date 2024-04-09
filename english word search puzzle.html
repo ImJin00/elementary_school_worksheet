@@ -23,12 +23,18 @@
         }
         #puzzleContainer {
             text-align: center;
+            display: flex;
+            justify-content: center;
         }
         .word {
             display: inline-block;
             margin: 5px;
             padding: 5px 10px;
             border: 1px solid black;
+        }
+        #wordList {
+            margin-left: 20px;
+            text-align: left;
         }
     </style>
 </head>
@@ -39,8 +45,8 @@
     </div>
 
     <div id="puzzleContainer" style="display: none;">
-        <h2>English Word Search Puzzle</h2>
         <div id="puzzle"></div>
+        <div id="wordList"></div>
     </div>
 
     <script>
@@ -49,7 +55,9 @@
             var words = input.split(",").map(word => word.trim());
             var maxLength = findMaxLength(words);
             var wordSearch = generateWordSearch(words, maxLength);
+            var wordList = generateWordList(words);
             displayWordSearch(wordSearch);
+            displayWordList(wordList);
         }
 
         function findMaxLength(words) {
@@ -88,8 +96,14 @@
             // 입력한 단어 삽입
             words.forEach(word => {
                 var direction = Math.random() < 0.5 ? 'horizontal' : 'vertical';
-                var row = Math.floor(Math.random() * (tableSize - word.length - 1)) + 1;
-                var col = Math.floor(Math.random() * (tableSize - word.length - 1)) + 1;
+                var row, col;
+                if (direction === 'horizontal') {
+                    row = Math.floor(Math.random() * (tableSize - 1));
+                    col = Math.floor(Math.random() * (tableSize - word.length - 1));
+                } else {
+                    row = Math.floor(Math.random() * (tableSize - word.length - 1));
+                    col = Math.floor(Math.random() * (tableSize - 1));
+                }
 
                 for (var i = 0; i < word.length; i++) {
                     var cellIndex;
@@ -103,7 +117,7 @@
             });
 
             // 나머지 칸 영어 알파벳으로 채우기
-            var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var alphabet = 'abcdefghijklmnopqrstuvwxyz';
             var emptyCells = wordSearchHTML.match(/<td class="word"><\/td>/g);
             emptyCells.forEach(cell => {
                 var randomChar = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
@@ -114,11 +128,25 @@
             return wordSearchHTML;
         }
 
+        function generateWordList(words) {
+            var wordListHTML = '<h3>입력한 단어</h3><ul>';
+            words.forEach(word => {
+                wordListHTML += '<li>' + word + '</li>';
+            });
+            wordListHTML += '</ul>';
+            return wordListHTML;
+        }
+
         function displayWordSearch(wordSearch) {
             var puzzleContainer = document.getElementById("puzzle");
             puzzleContainer.innerHTML = wordSearch;
             document.getElementById("wordInputContainer").style.display = "none";
-            document.getElementById("puzzleContainer").style.display = "block";
+            document.getElementById("puzzleContainer").style.display = "flex";
+        }
+
+        function displayWordList(wordList) {
+            var wordListContainer = document.getElementById("wordList");
+            wordListContainer.innerHTML = wordList;
         }
     </script>
 </body>
