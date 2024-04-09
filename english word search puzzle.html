@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Word Search Puzzle Maker</title>
+    <style>
+        #wordInput {
+            width: 300px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+        }
+        #wordInput, #submitButton {
+            display: block;
+        }
+        #submitButton {
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #puzzleContainer {
+            text-align: center;
+        }
+        .word {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div id="wordInputContainer">
+        <input type="text" id="wordInput" placeholder="단어를 입력하세요 (여러 단어는 쉼표로 구분)">
+        <button onclick="createWordSearchPuzzle()" id="submitButton">완성</button>
+    </div>
+
+    <div id="puzzleContainer" style="display: none;">
+        <h2>English Word Search Puzzle</h2>
+        <div id="puzzle"></div>
+    </div>
+
+    <script>
+        function createWordSearchPuzzle() {
+            var input = document.getElementById("wordInput").value;
+            var words = input.split(",").map(word => word.trim());
+            var maxLength = findMaxLength(words);
+            var wordSearch = generateWordSearch(words, maxLength);
+            displayWordSearch(wordSearch);
+        }
+
+        function findMaxLength(words) {
+            var maxLength = 0;
+            words.forEach(word => {
+                if (word.length > maxLength) {
+                    maxLength = word.length;
+                }
+            });
+            return maxLength;
+        }
+
+        function shuffleArray(array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;
+        }
+
+        function generateWordSearch(words, maxLength) {
+            var tableSize = maxLength + 3;
+            var wordSearchHTML = '<table>';
+
+            // 정사각형 표 생성
+            for (var i = 0; i < tableSize; i++) {
+                wordSearchHTML += '<tr>';
+                for (var j = 0; j < tableSize; j++) {
+                    wordSearchHTML += '<td class="word"></td>';
+                }
+                wordSearchHTML += '</tr>';
+            }
+
+            // 입력한 단어 삽입
+            words.forEach(word => {
+                var direction = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+                var row = Math.floor(Math.random() * (tableSize - word.length - 1)) + 1;
+                var col = Math.floor(Math.random() * (tableSize - word.length - 1)) + 1;
+
+                for (var i = 0; i < word.length; i++) {
+                    var cellIndex;
+                    if (direction === 'horizontal') {
+                        cellIndex = (row * tableSize) + col + i;
+                    } else {
+                        cellIndex = ((row + i) * tableSize) + col;
+                    }
+                    wordSearchHTML = wordSearchHTML.replace('<td class="word"></td>', '<td class="word">' + word[i] + '</td>');
+                }
+            });
+
+            // 나머지 칸 영어 알파벳으로 채우기
+            var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var emptyCells = wordSearchHTML.match(/<td class="word"><\/td>/g);
+            emptyCells.forEach(cell => {
+                var randomChar = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                wordSearchHTML = wordSearchHTML.replace('<td class="word"></td>', '<td class="word">' + randomChar + '</td>');
+            });
+
+            wordSearchHTML += '</table>';
+            return wordSearchHTML;
+        }
+
+        function displayWordSearch(wordSearch) {
+            var puzzleContainer = document.getElementById("puzzle");
+            puzzleContainer.innerHTML = wordSearch;
+            document.getElementById("wordInputContainer").style.display = "none";
+            document.getElementById("puzzleContainer").style.display = "block";
+        }
+    </script>
+</body>
+</html>
